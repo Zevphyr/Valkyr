@@ -28,4 +28,4 @@ class LoginForm(FlaskForm):
         pass
 
     def validate_email(self, email):
-        pass
+pass
