@@ -12,7 +12,7 @@ class User(db.Model):
     posts = db.relationship('Post', backref='author', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}')"
+        return f"User('{self.username}', '{self.email}', '{self.password}')"
 
 
 # Create Post Model
@@ -25,6 +25,4 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-
-
-return f"Post('{self.title}', '{self.data_posted}')"
+        return f"Post('{self.title}', '{self.data_posted}')"

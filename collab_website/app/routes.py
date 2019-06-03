@@ -1,8 +1,9 @@
 from flask import render_template, Flask, flash, request, redirect, url_for
 from flask_login import logout_user
+from app.models import User
 from app.forms import RegistrationForm, LoginForm
 from app.Upload.upload import allowed_file, secure_filename
-from app import app
+from app import app, bcrypt, db
 
 @app.route('/')
 @app.route('/index')
@@ -22,7 +23,15 @@ but with all the placeholders in it replaced with actual values. """
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        return redirect(url_for('index'))
+        # hash password when form is submitted and create user instance
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        # add and commit to database
+        db.session.add(user)
+        db.session.commit()
+        # flash a message that says they have successfully registered
+        flash('You have successfully made an account. You are now able to log in!')
+        return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -56,6 +65,6 @@ def upload_file():
 @app.route('/logout')
 def logout():
     logout_user()
-return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 
