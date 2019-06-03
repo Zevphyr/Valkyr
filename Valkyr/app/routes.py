@@ -1,15 +1,16 @@
 from flask import render_template, Flask, flash, request, redirect, url_for
 from flask_login import login_user, logout_user, current_user, login_required
-from Valkyr.app.models import User
-from Valkyr.app.forms import RegistrationForm, LoginForm
-from Valkyr.app.Upload.upload import allowed_file, secure_filename
-from Valkyr.app import app, bcrypt, db
+from app.models import User
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from app.Upload.upload import allowed_file, secure_filename
+from app import app, bcrypt, db
+import secrets, os
+from PIL import Image
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    # need to change this to acquire the user from the login form username data
     user = {'username': 'user'}
     return render_template('index.html', title='Home', user=user)
 
@@ -23,16 +24,11 @@ but with all the placeholders in it replaced with actual values. """
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        # if the current user data matches with our database then it will redirect to home (will display log out route)
-        if current_user.is_authenticated:
-            return redirect(url_for('index'))
         # hash password when form is submitted and create user instance
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
-        # add and commit to database
         db.session.add(user)
         db.session.commit()
-        # flash a message that says they have successfully registered
         flash('You have successfully made an account. You are now able to log in!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
@@ -40,26 +36,19 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # if the current user data matches with our database then it will redirect to home (will display log out route)
+    form = LoginForm()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    form = LoginForm()
     if form.validate_on_submit():
         # check database for username and password
-        # create user variable to filter by the username that the user inputted (if there isn't one then it will \
-        # return None)
         user = User.query.filter_by(username=form.username.data).first()
-        # create a conditional that checks if the user exists and that the password verifies with that they have \
-        # in the base
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            # log the user in and make sure you import the login_user function from flask_login and pass in the \
-            # remember argument as the second argument
             login_user(user, remember=form.remember.data)
             # redirect the logged in user to the page they were trying to access before
             next_page = request.args.get('next')
             # redirect us to the next page route if the next_page is not None 
-            # else it will just erdirect us to the home page
-            return redirect(next_page) if next_page else(url_for('index'))
+            # else it will redirect us to the home page
+            return redirect(next_page) if next_page else redirect(url_for('index'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Register', form=form)
@@ -91,9 +80,40 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# implement an account info in navigation pane
-# implement a check in place so the user is told to log in before they access the account page
-@app.route('/account')
+
+def save_picture(form_picture):
+    # randomize name to avoid duplicates
+    random_hex = secrets.token_hex(8)
+    # split picture file name and concatenate using the random hex and the file extension
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    # get full path where image will be saved
+    picture_path = os.path.join(app.root_path, 'static/profile_pic', picture_fn)
+    # resize picture with PIL module
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
+    
+
+@app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    return render_template('account.html', title='Account')
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Your account has been updated!')
+        return redirect(url_for('account'))
+    # prefill the fields on account page
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    # set an image_file variable
+    image_file = url_for('static', filename='profile_pic/'+ current_user.image_file)
+    return render_template('account.html', title='Account', image_file=image_file, form=form)
