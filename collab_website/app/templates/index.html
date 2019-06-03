@@ -1,13 +1,10 @@
-<html>
-    <head> <!-- placeholders for the dynamic content, enclosed in {{ ... }} sections. These placeholders represent the
-        parts of the page that are variable and will only be known at runtime. -->
-        {% if title %}
-        <title>{{ title }} - Collab-site</title>
-        {% else %}
-        <title>Welcome to Collab-site!</title>
-        {% endif %}
-    </head>
+{% extends "layout.html" %}
+{% block content %}
     <body>
-        <h1>Hello, {{ user.username }}!</h1>
+        {% if current_user.is_authenticated %}
+            <h1>Hello, {{ current_user.username }}!</h1>
+        {% else %}
+            <h1>Hello, {{ user.username }}</h1>
+        {% endif %}
     </body>
-</html>
+{% endblock %}
