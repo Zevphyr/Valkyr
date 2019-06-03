@@ -1,0 +1,12 @@
+## Creator & Maintainer
+
+* Zevpyr <kesantiago.249@gmail.com>
+
+
+## Contributors
+
+* Joe <https://github.com/jdlee6>
+  *Persistent resource storage; HTML templates and user login/registration plus misc. forms
+
+* [Your name or handle] <[email or website]>
+* [Brief summary of your changes]

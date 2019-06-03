@@ -1,0 +1,38 @@
+## Blueprints
+
+*All authentication scripts need to be moved to 'collab_website\app\Auth' and additionally
+ must be converted to blueprints 
+
+* Register all blueprints in '...\app\__init__.py'
+
+
+
+## Upload
+
+* WIP: basic html template available; @app.route & blueprint complete; script presumably 
+  functional but untested
+
+
+
+## Templates 
+
+* Improve and beautify current templates
+
+* Add functionality to 404.html and 500.html
+
+
+
+## Errors & Security
+
+* Add error handling
+* Sanitize user input
+
+
+## Educational
+
+* Add example directory
+
+* Improve existing comments and add new docstrings
+
+* Create example scripts (blueprints, html, __init__, route, etc.)
+  

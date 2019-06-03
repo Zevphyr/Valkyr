@@ -1,9 +1,13 @@
-{% extends "layout.html" %}
-{% block content %}
-<h1>Hello, {{ user.username }}!</h1>
-{% endblock content %}
-
-
-
-
-
+<html>
+    <head> <!-- placeholders for the dynamic content, enclosed in {{ ... }} sections. These placeholders represent the
+        parts of the page that are variable and will only be known at runtime. -->
+        {% if title %}
+        <title>{{ title }} - Collab-site</title>
+        {% else %}
+        <title>Welcome to Collab-site!</title>
+        {% endif %}
+    </head>
+    <body>
+        <h1>Hello, {{ user.username }}!</h1>
+    </body>
+</html>
