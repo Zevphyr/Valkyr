@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 import os
 
 app = Flask(__name__)
@@ -18,5 +19,13 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+
+# login is the name of our route 
+# when a user who isn't logged in is trying to go their account page, it will redirect them to the login route
+# saying "Please log in to access this page."
+login_manager.login_view = 'login'
+# color of log in flash message 
+login_manager.login_message_category = 'info'
 
 from app import routes

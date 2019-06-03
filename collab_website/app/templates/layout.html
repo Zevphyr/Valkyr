@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<link href="/static/bootstrap-reboot.min.css" rel="stylesheet" media="screen">
 <head>
     {% if title %}
         <title>{{ title }} - Collab-site</title>
@@ -16,6 +17,17 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
+        </div>
+        <!-- Navbar Right Side -->
+        <div class="navbar-nav">
+        {% if current_user.is_authenticated %}
+            <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+            <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
+        {% else %}
+            <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+            <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+        </div>
     {% block content %}{% endblock %}
 </body>
 </html>
