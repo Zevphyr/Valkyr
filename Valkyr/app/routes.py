@@ -1,6 +1,6 @@
 from flask import render_template, Flask, flash, request, redirect, url_for
 from flask_login import login_user, logout_user, current_user, login_required
-from app.models import User
+from app.models import User, Post, load_user
 from app.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from werkzeug.utils import secure_filename
 from app import app, bcrypt, db
@@ -63,6 +63,7 @@ def allowed_file(filename):
 
 
 @app.route('/upload', methods=['GET', 'POST'])
+@login_required
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -78,8 +79,14 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+
+            newFile = Post(title=file.filename, data=file.read(), user_id=current_user.id)
+            db.session.add(newFile)
+            db.session.commit()
+            return 'Saved ' + file.filename + ' to the database'
+
+            # return redirect(url_for('upload_file',
+                                    # filename=filename))
     return render_template('upload.html', title='Upload')
 
 
