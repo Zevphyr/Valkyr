@@ -26,6 +26,7 @@
 
 * Add error handling
 * Sanitize user input
+* Generate logs
 
 
 ## Educational

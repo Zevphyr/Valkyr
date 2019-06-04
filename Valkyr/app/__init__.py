@@ -6,10 +6,11 @@ import os
 
 app = Flask(__name__)
 
-# Imports the Upload blueprint
+# To use our upload function we must first register it
 from app.Upload import bp as upload_bp
 app.register_blueprint(upload_bp)
 
+# We need to tell the app where to store the uploaded files
 from app.Upload.upload import UPLOAD_FOLDER
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 

@@ -6,4 +6,6 @@ collab_website
 
 .idea
 
+*.pyc
+
 
