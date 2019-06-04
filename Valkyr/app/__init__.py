@@ -13,7 +13,7 @@ app.register_blueprint(upload_bp)'''
 
 # We need to tell the app where to store the uploaded files
 home = Path.home()
-UPLOAD_FOLDER = Path(home.joinpath('Desktop', 'site', 'Valkyr', 'media'))
+UPLOAD_FOLDER = Path(home.joinpath('Desktop', 'git', 'Collab-website', 'Valkyr', 'media'))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # crf token for login and register (set an environment variable using secrets.token_hex(16))

@@ -1,5 +1,5 @@
 from flask import render_template, Flask, flash, request, redirect, url_for
-from flask_login import login_user, logout_user, current_user, login_required
+from flask_login import login_user, logout_user, current_user, login_required, LoginManager
 from app.models import User, Post, load_user
 from app.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from werkzeug.utils import secure_filename
@@ -132,3 +132,12 @@ def account():
     # set an image_file variable
     image_file = url_for('static', filename='profile_pic/'+ current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
+
+
+@app.errorhandler(404)
+def error_page_not_found(error):
+    error_code = 404
+    error_message = "Sorry, page not found!"
+    return render_template('404.html',
+                           error_code=error_code,
+                           error_message=error_message), 404
