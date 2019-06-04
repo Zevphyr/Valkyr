@@ -7,10 +7,10 @@ import os
 app = Flask(__name__)
 
 # Imports the Upload blueprint
-from Valkyr.app.Upload import bp as upload_bp
+from app.Upload import bp as upload_bp
 app.register_blueprint(upload_bp)
 
-from Valkyr.app.Upload.upload import UPLOAD_FOLDER
+from app.Upload.upload import UPLOAD_FOLDER
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # crf token for login and register (set an environment variable using secrets.token_hex(16))
@@ -28,4 +28,4 @@ login_manager.login_view = 'login'
 # color of log in flash message 
 login_manager.login_message_category = 'info'
 
-from Valkyr.app import routes
+from app import routes
