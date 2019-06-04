@@ -27,11 +27,12 @@ class User(db.Model, UserMixin):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    description = db.Column(db.Text, nullable=False)
-    # TODO: upload feature here?
+    # date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    # description = db.Column(db.Text, nullable=False)
+    data = db.Column(db.LargeBinary)
+
     # referencing user.id in User model
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"Post('{self.title}', '{self.data_posted}')"
+        return f"Post('{self.title}', '{self.user_id}')"
