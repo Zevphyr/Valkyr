@@ -2,7 +2,7 @@ from flask import render_template, Flask, flash, request, redirect, url_for
 from flask_login import login_user, logout_user, current_user, login_required
 from app.models import User
 from app.forms import RegistrationForm, LoginForm, UpdateAccountForm
-from app.Upload.upload import allowed_file, secure_filename
+from werkzeug.utils import secure_filename
 from app import app, bcrypt, db
 import secrets, os
 from PIL import Image
@@ -54,6 +54,14 @@ def login():
     return render_template('login.html', title='Register', form=form)
 
 
+ALLOWED_EXTENSIONS = {'mp4', '3gp', 'wmv', 'ogg', 'mp3', 'wav', 'mpg', 'avi', 'png'}  # A set for allowed file extensions
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -72,7 +80,7 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
-        return render_template('upload.html', title='Upload', form=form)
+    return render_template('upload.html', title='Upload')
 
 
 @app.route('/logout')

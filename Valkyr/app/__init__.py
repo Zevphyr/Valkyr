@@ -1,17 +1,19 @@
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask import Flask
+from pathlib import Path
 import os
 
 app = Flask(__name__)
 
-# To use our upload function we must first register it
-from app.Upload import bp as upload_bp
-app.register_blueprint(upload_bp)
+# To use our blueprint we must first register it
+'''rom app.Upload import bp as upload_bp
+app.register_blueprint(upload_bp)'''
 
 # We need to tell the app where to store the uploaded files
-from app.Upload.upload import UPLOAD_FOLDER
+home = Path.home()
+UPLOAD_FOLDER = Path(home.joinpath('Desktop', 'git', 'Collab_website', 'Valkyr', 'media'))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # crf token for login and register (set an environment variable using secrets.token_hex(16))
@@ -30,3 +32,5 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
 from app import routes
+
+
