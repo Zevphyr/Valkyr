@@ -136,8 +136,6 @@ def account():
 
 @app.errorhandler(404)
 def error_page_not_found(error):
-    error_code = 404
-    error_message = "Sorry, page not found!"
-    return render_template('404.html',
-                           error_code=error_code,
-                           error_message=error_message), 404
+    # error_code = 404
+    # error_message = "Sorry, page not found!"
+    return render_template('Errors/404.html'), 404
