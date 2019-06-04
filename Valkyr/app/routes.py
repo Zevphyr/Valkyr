@@ -1,7 +1,7 @@
 from flask import render_template, Flask, flash, request, redirect, url_for
 from flask_login import login_user, logout_user, current_user, login_required, LoginManager
 from app.models import User, Post, load_user
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UploadForm
 from werkzeug.utils import secure_filename
 from app import app, bcrypt, db
 import secrets, os
@@ -11,8 +11,10 @@ from PIL import Image
 @app.route('/')
 @app.route('/index')
 def index():
+    # retreive all the posts from our database
+    posts = Post.query.all()
     user = {'username': 'user'}
-    return render_template('index.html', title='Home', user=user)
+    return render_template('index.html', title='Home', user=user, posts=posts)
 
 
 """ The index() function imports a in-built function that comes with the Flask framework called render_template(). /
@@ -65,6 +67,7 @@ def allowed_file(filename):
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload_file():
+    form = UploadForm()
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -80,14 +83,23 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            newFile = Post(title=file.filename, data=file.read(), user_id=current_user.id)
+            newFile = Post(title=file.filename, data=file.read(), description=form.description.data,  user_id=current_user.id)
             db.session.add(newFile)
             db.session.commit()
-            return 'Saved ' + file.filename + ' to the database'
 
-            # return redirect(url_for('upload_file',
-                                    # filename=filename))
-    return render_template('upload.html', title='Upload')
+        if form.validate_on_submit():
+            flash('Your post has been created!')
+            return redirect(url_for('upload_file',
+                                    filename=filename))
+    return render_template('upload.html', title='Upload', form=form)
+
+
+# route for single post (/upload/1 . . . /upload/2)
+@app.route('/upload/<int:post_id>')
+def upload(post_id):
+    # fetch post if it exists by id
+    post = Post.query.get_or_404(post_id)
+    return render_template('post.html', title=post.title, post=post)
 
 
 @app.route('/logout')
