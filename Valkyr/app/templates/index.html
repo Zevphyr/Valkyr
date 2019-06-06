@@ -14,7 +14,12 @@
                         <a class="mr-2" href="#">{{ post.author.username }}</a>
                         <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
                     </div>
-                    <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+                    <h2><a class="article-title" href="{{ url_for('upload', post_id=post.id) }}">{{ post.title }}</a></h2>
+                    
+                    <video width="854" height="480" controls >
+                        <source src="{{ url_for('send_video', filename=post.filename) }}" type="video/mp4">
+                    </video>
+
                     <p class="article-description">{{ post.description }}</p>
                 </div>
             </article>
