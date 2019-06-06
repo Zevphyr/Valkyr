@@ -1,4 +1,4 @@
-from flask import render_template, Flask, flash, request, redirect, url_for
+from flask import render_template, Flask, flash, request, redirect, url_for, send_file, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required, LoginManager
 from app.models import User, Post, load_user
 from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UploadForm
@@ -82,8 +82,9 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            print(filename)
 
-            newFile = Post(title=file.filename, data=file.read(), description=form.description.data,  user_id=current_user.id)
+            newFile = Post(title=form.title.data, data=file.read(), description=form.description.data,  user_id=current_user.id, filename=filename)
             db.session.add(newFile)
             db.session.commit()
 
@@ -91,6 +92,7 @@ def upload_file():
             flash('Your post has been created!')
             return redirect(url_for('upload_file',
                                     filename=filename))
+
     return render_template('upload.html', title='Upload', form=form)
 
 
@@ -100,6 +102,11 @@ def upload(post_id):
     # fetch post if it exists by id
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', title=post.title, post=post)
+
+# send video file from our media folder 
+@app.route('/media/<filename>')
+def send_video(filename):
+		return send_from_directory('/home/joe/Desktop/site/Valkyr/app/static/media', filename)
 
 
 @app.route('/logout')

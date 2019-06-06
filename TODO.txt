@@ -44,10 +44,9 @@
 
 * Implement a navigation bar on layout.html so it looks cleaner
 
-## Posts
 
-* Continue developing the Post class so each user can make a Post
+## Posts
 
 * Implement comments by other users on Post
 
-* Create, deleting, and updating a Post
+* Deleting and Updating (only title and description of post (Not for uploads) )
