@@ -30,9 +30,10 @@ class Post(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     description = db.Column(db.Text, nullable=False)
     data = db.Column(db.LargeBinary)
+    filename = db.Column(db.String(20))
 
     # referencing user.id in User model
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"Post('{self.title}', '{self.user_id}')"
+        return f"Post('{self.title}', '{self.user_id}', '{self.filename}')"

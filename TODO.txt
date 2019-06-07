@@ -39,16 +39,13 @@
 * Create example scripts (blueprints, html, __init__, route, etc.)
 
 
-## Themes
+## Themes (Implemented sample bootstrap theme temporarily -> will change soon)
 
 * Implement bootstrap theme so that the flash messages appear in a colored text box
 
 * Implement a navigation bar on layout.html so it looks cleaner
 
+
 ## Posts
 
-* Continue developing the Post class so each user can make a Post
-
 * Implement comments by other users on Post
-
-* Create, deleting, and updating a Post
