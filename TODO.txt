@@ -38,7 +38,7 @@
 * Create example scripts (blueprints, html, __init__, route, etc.)
   
 
-## Themes
+## Themes (Implemented sample bootstrap theme temporarily -> will change soon)
 
 * Implement bootstrap theme so that the flash messages appear in a colored text box
 
@@ -48,5 +48,3 @@
 ## Posts
 
 * Implement comments by other users on Post
-
-* Deleting and Updating (only title and description of post (Not for uploads) )
