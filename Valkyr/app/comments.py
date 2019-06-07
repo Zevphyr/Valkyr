@@ -4,14 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from app import db
 
 
-
 class Comment(db.Model):
     _Digit = 6
 
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(140))
-    author = db.Column(db.String(32))/
-    #
+    author = db.Column(db.String(32))
     timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
     path = db.Column(db.Text, index=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
@@ -29,6 +27,7 @@ class Comment(db.Model):
     def level(self):
         return len(self.path) // self._Digit - 1
 
+
 """ Obtaining a unique id that increments automatically to use in the path;
 obtains the id assigned by the database requiring that the comment is saved twice."""
 
@@ -43,7 +42,7 @@ for comment in [c1, c2, c11, c12, c111, c21]:
     comment.save()
 
 for comment in Comment.query.order_by(Comment.path):
-print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
+    print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
 
 
 """  Not sure how to go about this further...
