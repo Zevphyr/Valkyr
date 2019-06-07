@@ -1,20 +1,21 @@
 ## Blueprints
 
 *All authentication scripts need to be moved to 'collab_website\app\Auth' and additionally
- must be converted to blueprints 
+ must be converted to blueprints
 
 * Register all blueprints in '...\app\__init__.py'
 
 
 
-## Upload
+## Comments
 
-* WIP: basic html template available; @app.route & blueprint complete; script presumably 
-  functional but untested
+*  Add another column to the the Comment model that links
+   to the page on which the comment should appear.
+
+*  Add a voting function
 
 
-
-## Templates 
+## Templates
 
 * Improve and beautify current templates
 
@@ -36,7 +37,7 @@
 * Improve existing comments and add new docstrings
 
 * Create example scripts (blueprints, html, __init__, route, etc.)
-  
+
 
 ## Themes
 
