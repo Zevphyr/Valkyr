@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, current_user, login_required, L
 from app.models import User, Post, load_user
 from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UploadForm
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import HTTP_STATUS_CODES, HTTPException
 from app import app, bcrypt, db
 import secrets, os
 from PIL import Image
@@ -191,9 +192,36 @@ def account():
     image_file = url_for('static', filename='profile_pic/'+ current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
+""" 
+Error Handling starts here
+"""
+
+
+@app.errorhandler(500)
+def special_exception_handler(e):
+    return render_template('Errors/500.html'), 500
+
+
+@app.errorhandler(401)
+def unauthorized(e):
+    return render_template('Errors/401.html'), 401
+
 
 @app.errorhandler(404)
-def error_page_not_found(error):
-    # error_code = 404
-    # error_message = "Sorry, page not found!"
+def error_page_not_found(e):
     return render_template('Errors/404.html'), 404
+
+
+@app.errorhandler(400)
+def handle_bad_request(e):
+    return render_template('Errors/400.html'), 400
+
+
+@app.errorhandler(429)
+def too_many_request(e):
+    return render_template('Errors/429.html'), 429
+
+
+"""
+Error Handling ends here
+"""

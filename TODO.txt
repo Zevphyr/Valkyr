@@ -1,6 +1,6 @@
 ## Blueprints
 
-*All authentication scripts need to be moved to 'collab_website\app\Auth' and additionally
+*All authentication scripts need to be moved to 'Valkyr\Auth' and additionally
  must be converted to blueprints
 
 * Register all blueprints in '...\app\__init__.py'
@@ -17,11 +17,7 @@
 
 ## Templates
 
-* Improve and beautify current templates
-
-* Add functionality to 404.html and 500.html
-
-
+* Create new templates as needed for new pages
 
 ## Errors & Security
 
@@ -44,6 +40,10 @@
 * Implement bootstrap theme so that the flash messages appear in a colored text box
 
 * Implement a navigation bar on layout.html so it looks cleaner
+
+* Fix script in 404.html (currently not working)
+
+* Apply bootstrap theme in a way so that it does not overwrite all other styling
 
 
 ## Posts

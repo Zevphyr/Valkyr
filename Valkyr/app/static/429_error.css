@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Coda|Knewave');
+body {
+  background-color: #3F4064;
+}
+h1 {
+  text-align: center;
+  color: #E3D697;
+  text-transform: uppercase;
+  font-size: 12em;
+  font-family: 'Knewave';
+  text-shadow: 5px 5px 0 #AA4534;
+  transform: skew(0, -6.7deg);
+  margin: 0 auto;
+  max-width: 800px;
+}
+h2 {
+  font-family: 'Knewave';
+  font-size: 2.5em;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto 2em;
+  padding: 1em;
+  line-height: 1.35em;
+  color: #E3D697;
+  transform: skew(0, -6.7deg);
+  border-bottom: 5px solid #AA4534;
+  border-top: 5px solid #AA4534;
+}
+.buttons {
+  text-align: center;
+  transform: skew(0, -6.7deg);
+}
+a {
+  color: #AA4534;
+  border: 3px solid #AA4534;
+  font-family: 'Coda';
+  text-decoration: none;
+  padding: 10px 20px;
+  margin: 10px;
+  text-transform: uppercase;
+  font-size: 1.25em;
+  box-shadow: 0 0 40px rgba(0, 0, 0, .2);
+  text-shadow: 0 0 20px rgba(0, 0, 0, .3);
+}
+a:hover {
+  background: #E4AD2E;
+  border-color: #E4AD2E;
+  color: #3F4064;
+}

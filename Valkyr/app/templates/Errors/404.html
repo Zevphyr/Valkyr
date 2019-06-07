@@ -1,18 +1,27 @@
-{% extends "layout.html" %}
+<!--
+Making the error page look pretty
+-->
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='404_error.css') }}">
+{% endblock %}
+<!--
+New content block with text and a script that counts up to 404.
+-->
 {% block content %}
 <body>
     <div class="container">
         <div class="row">
             <div class="xs-12 md-6 mx-auto">
                 <div id="countUp">
-                    <script src="/static/404_error.js"></script>
                     <div class="number" data-count="404">0</div>
                     <div class="text">Page not found</div>
                     <div class="text">This may not mean anything.</div>
                     <div class="text">I'm probably working on something that has blown up.</div>
+                    <div class="text"><a href="{{ url_for('index') }}">Go somewhere nice</a></div>
                 </div>
             </div>
         </div>
     </div>
+<script type="text/javascript" src="{{ url_for('static', filename='404_error.js') }}"></script>
 </body>
 {% endblock %}
