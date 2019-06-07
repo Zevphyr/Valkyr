@@ -1,4 +1,4 @@
-from flask import render_template, Flask, flash, request, redirect, url_for, send_file, send_from_directory
+from flask import render_template, Flask, flash, request, redirect, url_for, send_file, abort, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required, LoginManager
 from app.models import User, Post, load_user
 from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UploadForm
@@ -93,7 +93,45 @@ def upload_file():
             return redirect(url_for('upload_file',
                                     filename=filename))
 
-    return render_template('upload.html', title='Upload', form=form)
+    return render_template('upload.html', title='Upload', form=form, legend='Upload')
+
+
+@app.route('/upload/<int:post_id>/update', methods=['GET', 'POST'])
+@login_required
+def update_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    # only the user who created the post can make changes; if the user is not the author of the post it will return a Forbidden error page
+    if post.author != current_user:
+        abort(403)
+    # don't let user change the video (no video field in UploadForm())
+    form = UploadForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.description = form.description.data
+        # commit the chagnes made to title and description and update post 
+        db.session.commit()
+        flash('Your post has been updated!', 'success')
+        return redirect(url_for('upload', post_id=post.id))
+
+    # prepopulate the form fields if it is a GET method
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.description.data = post.description
+        
+    return render_template('upload.html', title='Update Post', form=form, legend='Update')
+
+
+@app.route('/upload/<int:post_id>/delete', methods=['POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+    # if the user is the author of the post then the user can delete the post and be redirected to home page
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your post has been deleted!', 'success')
+    return redirect(url_for('index'))
 
 
 # route for single post (/upload/1 . . . /upload/2)
@@ -102,6 +140,7 @@ def upload(post_id):
     # fetch post if it exists by id
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', title=post.title, post=post)
+
 
 # send video file from our media folder 
 @app.route('/media/<filename>')
