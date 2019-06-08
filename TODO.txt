@@ -8,7 +8,7 @@
 
 ## Comments
 
-* Displaying the comments on the website (redirect them to the comment page (displaying the comments and the user who commented them) instead of  redirecting to the home page)
+* When the user clicks on the user who posted the account we want to redirect that user to their account page
 
 * Implement feature to show the parent comments and replies and etc.
 
