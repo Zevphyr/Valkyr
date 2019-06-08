@@ -1,7 +1,7 @@
 from flask import render_template, Flask, flash, request, redirect, url_for, send_file, abort, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required, LoginManager
-from app.models import User, Post, load_user
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UploadForm
+from app.models import User, Post, load_user, Comment
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UploadForm, CommentForm
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import HTTP_STATUS_CODES, HTTPException
 from app import app, bcrypt, db
@@ -136,11 +136,28 @@ def delete_post(post_id):
 
 
 # route for single post (/upload/1 . . . /upload/2)
-@app.route('/upload/<int:post_id>')
+@app.route('/upload/<int:post_id>', methods=['GET', 'POST'])
 def upload(post_id):
     # fetch post if it exists by id
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', title=post.title, post=post)
+
+
+# get rerouted here if user clicks the add comments
+'''TODO need to figure out how to display the comments from our database on our comments template'''
+@app.route('/upload/<int:post_id>/comments', methods=['GET', 'POST'])
+def comments(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = CommentForm()
+    if form.validate_on_submit():
+        # Comment gets added to database if form is validated on submit
+        comment = Comment(text=form.comment.data, user_id=current_user.id, post_id=post.id)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Comment posted!', 'success')
+        return redirect(url_for('upload', post_id=post.id))
+
+    return render_template('comment.html', post=post, form=form)
 
 
 # send video file from our media folder 
@@ -191,6 +208,7 @@ def account():
     # set an image_file variable
     image_file = url_for('static', filename='profile_pic/'+ current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
+
 
 """ 
 Error Handling starts here

@@ -57,3 +57,7 @@ class UploadForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description')  
     submit = SubmitField('Upload')
+
+class CommentForm(FlaskForm):
+    comment = StringField('Enter your comment here', validators=[DataRequired()])
+    submit = SubmitField('Comment')

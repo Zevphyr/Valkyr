@@ -6,23 +6,32 @@
 * Register all blueprints in '...\app\__init__.py'
 
 
-
 ## Comments
 
-*  Add another column to the the Comment model that links
+* Displaying the comments on the website (redirect them to the comment page (displaying the comments and the user who commented them) instead of  redirecting to the home page)
+
+* Implement feature to show the parent comments and replies and etc.
+
+* Implement a feature that lets the user remove their comments (but will leave "user deleted comment" 
+instead of having it completely erased.)
+
+* Add another column to the Comment model that links
    to the page on which the comment should appear.
 
-*  Add a voting function
+* Add a voting function
 
 
 ## Templates
 
 * Create new templates as needed for new pages
 
+
 ## Errors & Security
 
 * Add error handling
+
 * Sanitize user input
+
 * Generate logs
 
 
@@ -35,6 +44,7 @@
 * Create example scripts (blueprints, html, __init__, route, etc.)
 
 
+
 ## Themes (Implemented sample bootstrap theme temporarily -> will change soon)
 
 * Implement bootstrap theme so that the flash messages appear in a colored text box
@@ -44,8 +54,3 @@
 * Fix script in 404.html (currently not working)
 
 * Apply bootstrap theme in a way so that it does not overwrite all other styling
-
-
-## Posts
-
-* Implement comments by other users on Post
