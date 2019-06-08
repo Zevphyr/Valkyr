@@ -31,18 +31,18 @@ class Comment(db.Model):
 """ Obtaining a unique id that increments automatically to use in the path;
 obtains the id assigned by the database requiring that the comment is saved twice."""
 
-db.create_all()
-c1 = Comment(text='example1', author='user1')
-c2 = Comment(text='example2', author='user2')
-c11 = Comment(text='example3', author='user3', parent=c1)
-c12 = Comment(text='example4', author='user4', parent=c1)
-c111 = Comment(text='example5', author='user5', parent=c11)
-c21 = Comment(text='example6', author='user6', parent=c2)
-for comment in [c1, c2, c11, c12, c111, c21]:
-    comment.save()
+# db.create_all()
+# c1 = Comment(text='example1', author='user1')
+# c2 = Comment(text='example2', author='user2')
+# c11 = Comment(text='example3', author='user3', parent=c1)
+# c12 = Comment(text='example4', author='user4', parent=c1)
+# c111 = Comment(text='example5', author='user5', parent=c11)
+# c21 = Comment(text='example6', author='user6', parent=c2)
+# for comment in [c1, c2, c11, c12, c111, c21]:
+#     comment.save()
 
-for comment in Comment.query.order_by(Comment.path):
-    print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
+# for comment in Comment.query.order_by(Comment.path):
+#     print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
 
 
 """  Not sure how to go about this further...

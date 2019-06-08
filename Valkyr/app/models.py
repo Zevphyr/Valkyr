@@ -31,9 +31,21 @@ class Post(db.Model):
     description = db.Column(db.Text, nullable=False)
     data = db.Column(db.LargeBinary)
     filename = db.Column(db.String(20))
-
     # referencing user.id in User model
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.user_id}', '{self.filename}')"
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(140))
+    # referencing user.id in User model
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # reference post.id in Post model
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
+
+    def __repr__(self):
+        return f"Comment(Text: '{self.text}',\n\nPost ID: '{self.post_id}',\n\nUser ID: '{self.user_id}')"
