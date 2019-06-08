@@ -41,11 +41,11 @@ class Post(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(140))
-    # referencing user.id in User model
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # reference post.id in Post model
+    # referencing username in User model
+    user_username = db.Column(db.String(40), db.ForeignKey('user.username'), nullable=False)
+    # reference id in Post model
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
 
     def __repr__(self):
-        return f"Comment(Text: '{self.text}',\n\nPost ID: '{self.post_id}',\n\nUser ID: '{self.user_id}')"
+        return f"Comment(Text: '{self.text}',\n\nPost ID: '{self.post_id}',\n\nUser ID: '{self.user_username}')"

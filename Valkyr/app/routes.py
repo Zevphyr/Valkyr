@@ -144,20 +144,22 @@ def upload(post_id):
 
 
 # get rerouted here if user clicks the add comments
-'''TODO need to figure out how to display the comments from our database on our comments template'''
 @app.route('/upload/<int:post_id>/comments', methods=['GET', 'POST'])
+@login_required
 def comments(post_id):
     post = Post.query.get_or_404(post_id)
+    comments = Comment.query.filter_by(post_id=post.id).all()
     form = CommentForm()
+
     if form.validate_on_submit():
         # Comment gets added to database if form is validated on submit
-        comment = Comment(text=form.comment.data, user_id=current_user.id, post_id=post.id)
+        comment = Comment(text=form.comment.data, user_username=current_user.username, post_id=post.id)
         db.session.add(comment)
         db.session.commit()
         flash('Comment posted!', 'success')
         return redirect(url_for('upload', post_id=post.id))
 
-    return render_template('comment.html', post=post, form=form)
+    return render_template('comment.html', post=post, form=form, comments=comments)
 
 
 # send video file from our media folder 
@@ -209,6 +211,17 @@ def account():
     image_file = url_for('static', filename='profile_pic/'+ current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
+
+# redirect the user to user page when clicking on username and show their upload information
+# and comment information
+@app.route("/user/<string:username>")
+def user_posts(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = Post.query.filter_by(author=user)\
+    .order_by(Post.date_posted.desc())\
+    .paginate(page=page, per_page=4)
+    return render_template('user_posts.html', posts=posts, user=user)
 
 """ 
 Error Handling starts here
