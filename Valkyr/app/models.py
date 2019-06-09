@@ -45,6 +45,7 @@ class Comment(db.Model):
     user_username = db.Column(db.String(40), db.ForeignKey('user.username'), nullable=False)
     # reference id in Post model
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    post_title = db.Column(db.Integer, db.ForeignKey('post.title'), nullable=False)
     timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
 
     def __repr__(self):

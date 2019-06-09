@@ -8,8 +8,6 @@
 
 ## Comments
 
-* When the user clicks on the user who posted the account we want to redirect that user to their account page
-
 * Implement feature to show the parent comments and replies and etc.
 
 * Implement a feature that lets the user remove their comments (but will leave "user deleted comment" 

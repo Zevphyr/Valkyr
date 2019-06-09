@@ -32,7 +32,7 @@ def register():
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash('You have successfully made an account. You are now able to log in!')
+        flash('You have successfully made an account. You are now able to log in!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -90,7 +90,7 @@ def upload_file():
             db.session.commit()
 
         if form.validate_on_submit():
-            flash('Your post has been created!')
+            flash('Your post has been created!', 'success')
             return redirect(url_for('upload_file',
                                     filename=filename))
 
@@ -109,7 +109,7 @@ def update_post(post_id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.description = form.description.data
-        # commit the chagnes made to title and description and update post 
+        # commit the changes made to title and description and update post 
         db.session.commit()
         flash('Your post has been updated!', 'success')
         return redirect(url_for('upload', post_id=post.id))
@@ -136,30 +136,40 @@ def delete_post(post_id):
 
 
 # route for single post (/upload/1 . . . /upload/2)
+# included the comment.html we incorporated {% include 'comment.html' %}
 @app.route('/upload/<int:post_id>', methods=['GET', 'POST'])
 def upload(post_id):
-    # fetch post if it exists by id
-    post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
-
-
-# get rerouted here if user clicks the add comments
-@app.route('/upload/<int:post_id>/comments', methods=['GET', 'POST'])
-@login_required
-def comments(post_id):
     post = Post.query.get_or_404(post_id)
     comments = Comment.query.filter_by(post_id=post.id).all()
     form = CommentForm()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            # Comment gets added to database if form is validated on submit
+            comment = Comment(text=form.comment.data, user_username=current_user.username, post_id=post.id, post_title=post.title)
+            db.session.add(comment)
+            db.session.commit()
+            flash('Comment posted!', 'success')
+            return redirect(url_for('upload', post_id=post.id))
+    # if the user isn't logged in it will redirect to the login page
+    if current_user.is_anonymous:
+        if form.validate_on_submit():
+            flash('Please log in to comment', 'danger')
+            return redirect(url_for('login'))
+    return render_template('post.html', post=post, form=form, comments=comments)
 
-    if form.validate_on_submit():
-        # Comment gets added to database if form is validated on submit
-        comment = Comment(text=form.comment.data, user_username=current_user.username, post_id=post.id)
-        db.session.add(comment)
-        db.session.commit()
-        flash('Comment posted!', 'success')
-        return redirect(url_for('upload', post_id=post.id))
 
-    return render_template('comment.html', post=post, form=form, comments=comments)
+''' TODO - delete comment '''
+# @app.route('/upload/<int:post_id>/delete/<int:comment_id>', methods=['GET', 'POST'])
+# def delete_comment(id):
+#     comment = Comment.query.get_or_404(id)
+#     post = Post.query.get_or_404(comment.post_id)
+#     if comment.user_username != current_user and post.author != current_user:
+#         abort(403)
+#     db.session.delete(comment)
+#     db.session.commit()
+#     flash('The comment has been deleted!', 'success')
+
+#     return redirect(url_for('index'))
 
 
 # send video file from our media folder 
@@ -221,7 +231,10 @@ def user_posts(username):
     posts = Post.query.filter_by(author=user)\
     .order_by(Post.date_posted.desc())\
     .paginate(page=page, per_page=4)
-    return render_template('user_posts.html', posts=posts, user=user)
+    comments = Comment.query.filter_by(user_username=username)\
+    .order_by(Comment.timestamp.desc())\
+    .paginate(page=page, per_page=4)
+    return render_template('user_posts.html', posts=posts, user=user, comments=comments)
 
 """ 
 Error Handling starts here
