@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     {% for post in posts.items %}
-        <h1 class="mb-3">Posts by {{ user.username }} ({{ posts.total }})</h1>
+        <h1 class="mb-3">Posts created by {{ user.username }} [{{ posts.total }}]</h1>
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pic/' + post.author.image_file )}}" width=125 height=125> 
             <div class="media-body">
@@ -9,9 +9,25 @@
                     <a class="mr-2" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
                     <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
                 </div>
-                <h2><a class="article-title" href="{{ url_for('upload', post_id=post.id) }}">{{ post.title }}</a></h2>
+                <a class="article-title" href="{{ url_for('upload', post_id=post.id) }}">{{ post.title }}</a>
                 <p class="article-content">{{ post.description }}</p>
-            </div>
-        </article>
+            </br>
+        </br>
+    </br>
     {% endfor %}
+
+        <div class="comment-sec-area">
+            <div class="container-left">
+                {% for comment in comments.items %}
+                    <h5>Commented on <a class="article-title" href="{{ url_for('upload', post_id=comment.post_id) }}">{{ comment.post_title }}</a></h5>
+
+                    <div class="commentText">
+                        <a href="{{ url_for('user_posts', username=comment.user_username) }}"><span>{{ comment.user_username }}</span></a>
+                        <small class="text-muted">{{ comment.timestamp.strftime('%Y-%m-%d') }}</small>
+                        <p class="">{{ comment.text }}</p> 
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+</article>
 {% endblock content %}

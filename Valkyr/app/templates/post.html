@@ -20,11 +20,9 @@
             </video>
 
             <p class="article-description">{{ post.description }}</p>
-
-            <form action="{{ url_for('comments', post_id=post.id) }}">
-                <input type="submit" value="Click here to comment" />
-            </form>
             
+            {% include 'comment.html' %}
+
         </div>
     </article>
     <!--MODAL-->
