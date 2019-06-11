@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<link href="/static/bootstrap-reboot.min.css" rel="stylesheet" media="screen">
+<html>
+<head>
+    <!-- Using Jinja2 we're ssaying that there is a block of content (the 'head') here and
+         that we want to interact with it so that when the template is rendered, this code is executed -->
+    {% block head %}
+     <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- url_for() generates a URL to the given path with the method provided.
+         Flask will automatically look for a folder called 'static'; you just need to provide
+         the filename that you want to access afterwards. -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity='sha384', crossorigin="anonymous">
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+  <div class="row">
+    <div class="large-12 columns">
+        {% block body %}
+        {% endblock %}
+    </div>
+  </div>
+{% endblock %}
+</body>
+</html>
