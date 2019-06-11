@@ -33,6 +33,13 @@ for the page we want to show for that request.
 
 This is an example route that we will erase when we create route.py
 """
-
 # import at the bottom to avoid circular imports which will mess up your application
+
+from app.example_blueprint import bp as example_bp
+app.register_blueprint(example_bp)
+"""
+When a blueprint is registered here: any functions; templates nested inside; static files; error handlers; routes;
+etc. are now connected and can be used by the application.
+"""
+
 from app import routes
